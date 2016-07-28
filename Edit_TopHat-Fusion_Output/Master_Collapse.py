@@ -1,6 +1,8 @@
 import collapse_tophatfusion as cthf
 import pandas as pd
 
+exportFormat = "/t" # changes separation values; comma separated: ","
+
 #inputFile
 #headerNameList = ["Sample_name", "Left_gene", "Left_chr", "Left_pos_center", "Right_gene", "Right_chr", "Right_pos_center", "Spanning_sum", "Spanning_mate_pairs_sum", "End_spanning_fusion_sum", "Fusion_score"]
 
@@ -29,4 +31,4 @@ def masterCollapse(inputFile, headerNameList):
 def exportAsCSV(inputFile, headerNameList):
     '''Takes as input a TopHat-Fuions output .txt file and a list of header names (of length 11) and makes a table. Runs the function masterCollapse and exports final, edited / collapsed table as a csv with file name {QC}.thFusion.result.collapsed.csv.'''
     finalTable = masterCollapse(inputFile, headerNameList)
-    finalTable.to_csv(inputFile[:-4] + ".collapsed.csv", sep="\t")
+    finalTable.to_csv(inputFile[:-4] + ".collapsed.csv", sep=exportFormat)
