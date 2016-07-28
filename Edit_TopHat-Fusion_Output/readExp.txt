@@ -1,0 +1,3 @@
+Must use both Python files to collapse TopHat-Fusion .txt files (removing duplicate rows, averaging duplicate positions, and summing supporting read counts).
+Running the exportToCSV function calls all previous functions in both scripts and returns a tab-separated .csv file, useful for maniuplation in the command line.
+Code can be easily changed to export comma-separated files for viewing in Microsoft Excel.
