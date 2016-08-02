@@ -10,8 +10,8 @@ import sys
 # Set a validation screening window
 window = 60000
 
-# set a distance-apart window for overlapping position windows (above)
-dist = 2000
+### set a distance-apart window buffer for overlapping position windows (above), actual overlap is accounted for below ###
+dist = 1000
 
 # Read in the original tophat-fusion result text file
 #tf_file = "/Users/jkeats/MMRF_2000.txt"
@@ -160,14 +160,24 @@ for row in gene_pairs.index:
     secondGene_Window_Start = int(secondGene_Pos_Mean) - window
     secondGene_Window_End = int(secondGene_Pos_Mean) + window
 
-    ### check if the two windows are overlapping: Not sure if other variables must be considered, such as the first gene being further along in the chromosome
-    if firstGene_Chr == secondGene_Chr: # if the fusion is on the same chromosome
-        if firstGene_Window_End < secondGene_Window_Start:
-            pass
-        elif firstGene_Window_End > secondGene_Window_Start:
-            midpoint = int(round(sum([firstGene_Pos_Mean, secondGene_Pos_Mean])/2))
-            firstGene_Window_End = midpoint - dist
-            secondGene_Window_Start = midpoint + dist
+    ### check if the two windows are overlapping: Not sure if other variables must be considered, such as the first gene being further along in the chromosome. ###
+    if firstGene_Chr == secondGene_Chr: # if the fusion is on the same chromosome; will these variable work or need to include firstGene_Chr2 and secondGene_Chr2?
+        if firstGene_Pos_Mean < secondGene_Pos_Mean:
+            if firstGene_Window_End < secondGene_Window_Start:
+                pass
+            elif firstGene_Window_End > secondGene_Window_Start:
+                halfDiff = int((firstGene_Window_End - secondGene_Window_Start)/2) # how much windows overlap divided by 2
+                midpoint = int(round(sum([firstGene_Pos_Mean, secondGene_Pos_Mean])/2))
+                firstGene_Window_End = midpoint - halfDiff - dist
+                secondGene_Window_Start = midpoint + halfDiff + dist
+        else:
+            if secondGene_Window_End < firstGene_Window_Start:
+                pass
+            elif secondGene_Window_End > firstGene_Window_Start:
+                halfDiff = int((secondGene_Window_End - firstGene_Window_Start)/2)  # how much windows overlap divided by two
+                midpoint = int(round(sum([firstGene_Pos_Mean, secondGene_Pos_Mean]) / 2))
+                secondGene_Window_End = midpoint - halfDiff - dist
+                firstGene_Window_Start = midpoint + halfDiff + dist
     else: pass
 
 
